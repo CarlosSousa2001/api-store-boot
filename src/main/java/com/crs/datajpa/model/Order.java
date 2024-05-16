@@ -17,5 +17,38 @@ public class Order {
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrdemItem> ordemItems = new ArrayList<>();
+    private List<OrderItem> orderItems = new ArrayList<>();
+
+
+    public Order(){}
+
+    public Order(Long id, User user, List<OrderItem> orderItems) {
+        this.id = id;
+        this.user = user;
+        this.orderItems = orderItems;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
 }
