@@ -2,7 +2,7 @@
 
 ## API REST - E-COMMERCE
 
-### Tenoclogias utilizadas
+### Tecnolgias utilizadas
 - Java 17
 - Spring boot 3.2.5
 - Spring Security
