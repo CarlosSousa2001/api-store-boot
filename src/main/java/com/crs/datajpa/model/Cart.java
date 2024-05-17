@@ -13,7 +13,7 @@ public class Cart {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private User userCart;
+    private Customer userCart;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "cart_items")
@@ -25,7 +25,7 @@ public class Cart {
 
     public Cart(){}
 
-    public Cart(Long id, User userCart, Set<CartItem> cartItems, int totalItem) {
+    public Cart(Long id, Customer userCart, Set<CartItem> cartItems, int totalItem) {
         this.id = id;
         this.userCart = userCart;
         this.cartItems = cartItems;
@@ -40,11 +40,11 @@ public class Cart {
         this.id = id;
     }
 
-    public User getUserCart() {
+    public Customer getUserCart() {
         return userCart;
     }
 
-    public void setUserCart(User userCart) {
+    public void setUserCart(Customer userCart) {
         this.userCart = userCart;
     }
 

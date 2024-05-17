@@ -14,7 +14,7 @@ public class Order {
     private Long id;
 
     @ManyToOne
-    private User user;
+    private Customer user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
@@ -22,7 +22,7 @@ public class Order {
 
     public Order(){}
 
-    public Order(Long id, User user, List<OrderItem> orderItems) {
+    public Order(Long id, Customer user, List<OrderItem> orderItems) {
         this.id = id;
         this.user = user;
         this.orderItems = orderItems;
@@ -36,11 +36,11 @@ public class Order {
         this.id = id;
     }
 
-    public User getUser() {
+    public Customer getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(Customer user) {
         this.user = user;
     }
 

@@ -1,6 +1,6 @@
 package com.crs.datajpa.controller;
 
-import com.crs.datajpa.model.User;
+import com.crs.datajpa.model.Customer;
 import com.crs.datajpa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,13 +15,13 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User userRequest) {
+    public ResponseEntity<Customer> createUser(@RequestBody Customer userRequest) {
         var userRes = userService.createUser(userRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(userRes);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<Customer> getUserById(@PathVariable Long id) {
         var getUserRes = userService.getById(id);
         return  ResponseEntity.ok().body(getUserRes);
     }

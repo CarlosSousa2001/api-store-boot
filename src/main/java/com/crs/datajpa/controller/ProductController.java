@@ -1,7 +1,6 @@
 package com.crs.datajpa.controller;
 
 import com.crs.datajpa.model.Product;
-import com.crs.datajpa.model.User;
 import com.crs.datajpa.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

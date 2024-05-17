@@ -1,8 +1,6 @@
 package com.crs.datajpa.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -10,14 +8,14 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name")
-    private String firstName;
+    @Column(name = "username")
+    private String username;
 
     @Column(name = "email", unique = true)
     private String email;
@@ -32,15 +30,22 @@ public class User {
     @JsonIgnore
     private Cart cart;
 
-    public User(){}
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    public User(Long id, String firstName, String email, String password, List<Address> addresses, Cart cart) {
+    public Customer(){}
+
+    public Customer(Long id, String username, String email, String password, List<Address> addresses, Cart cart) {
         this.id = id;
-        this.firstName = firstName;
+        this.username = username;
         this.email = email;
         this.password = password;
         this.addresses = addresses;
         this.cart = cart;
+    }
+
+    public enum Role {
+        ROLE_ADMIN, ROLE_CLIENTE
     }
 
     public Long getId() {
@@ -51,12 +56,12 @@ public class User {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -89,5 +94,13 @@ public class User {
 
     public void setCart(Cart cart) {
         this.cart = cart;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

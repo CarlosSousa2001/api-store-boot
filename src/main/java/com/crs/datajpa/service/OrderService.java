@@ -27,7 +27,7 @@ public class OrderService {
 
     public Order createOrder(AddOrderRequest addOrder){
 
-        User user = userService.getById(addOrder.getUserId());
+        Customer user = userService.getById(addOrder.getUserId());
         Cart cart = cartService.findCart(addOrder.getUserId());
 
         List<OrderItem> orderItems = new ArrayList<>();

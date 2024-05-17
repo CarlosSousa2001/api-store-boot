@@ -18,11 +18,11 @@ public class Address {
     @ManyToOne
     @JoinColumn(name="user_id")
     @JsonIgnore
-    private User user;
+    private Customer user;
 
     public Address(){}
 
-    public Address(Long id, String streetAddress, String city, User user) {
+    public Address(Long id, String streetAddress, String city, Customer user) {
         this.id = id;
         this.streetAddress = streetAddress;
         this.city = city;
@@ -53,11 +53,11 @@ public class Address {
         this.city = city;
     }
 
-    public User getUser() {
+    public Customer getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(Customer user) {
         this.user = user;
     }
 }

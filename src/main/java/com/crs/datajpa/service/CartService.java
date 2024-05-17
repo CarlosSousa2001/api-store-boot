@@ -1,9 +1,10 @@
 package com.crs.datajpa.service;
 
+import com.crs.datajpa.exceptions.EntityNotFoundException;
 import com.crs.datajpa.model.Cart;
 import com.crs.datajpa.model.CartItem;
 import com.crs.datajpa.model.Product;
-import com.crs.datajpa.model.User;
+import com.crs.datajpa.model.Customer;
 import com.crs.datajpa.repository.CartRepository;
 import com.crs.datajpa.request.AddItemRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class CartService {
 
         if (cartOptional.isPresent()) {
             Cart cart = cartOptional.get();
-            User user = cart.getUserCart();
+            Customer user = cart.getUserCart();
 
             if (user == null) {
                 throw new IllegalStateException("Carrinho encontrado, mas não há usuário associado.");
@@ -38,13 +39,13 @@ public class CartService {
 
             return cart;
         } else {
-            throw new ProductNotFoundException(id);
+            throw new EntityNotFoundException("Produto não encontrado");
         }
     }
 
     public String addItemToCart(AddItemRequest addItem)  {
 
-        User user = userService.getById(addItem.getUserID());
+        Customer user = userService.getById(addItem.getUserID());
 
         Optional<Cart> cartOptional = cartRepository.findByUserId(addItem.getUserID());
 
