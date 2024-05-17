@@ -1,8 +1,7 @@
 package com.crs.datajpa.service;
 
-import com.crs.datajpa.exceptions.ProductNotFoundException;
+import com.crs.datajpa.exceptions.EntityNotFoundException;
 import com.crs.datajpa.model.Product;
-import com.crs.datajpa.model.User;
 import com.crs.datajpa.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,7 @@ public class ProductService {
         Optional<Product> productOptional = productRepository.findById(id);
 
         if(productOptional.isEmpty()){
-            throw new ProductNotFoundException(id);
+            throw new EntityNotFoundException(String.format("Produto id=%s não encontrado", id));
         };
 
         return productOptional.get();

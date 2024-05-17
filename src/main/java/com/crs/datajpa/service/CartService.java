@@ -1,17 +1,14 @@
 package com.crs.datajpa.service;
 
-import com.crs.datajpa.exceptions.ProductNotFoundException;
 import com.crs.datajpa.model.Cart;
 import com.crs.datajpa.model.CartItem;
 import com.crs.datajpa.model.Product;
 import com.crs.datajpa.model.User;
 import com.crs.datajpa.repository.CartRepository;
-import com.crs.datajpa.repository.UserRepository;
 import com.crs.datajpa.request.AddItemRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
