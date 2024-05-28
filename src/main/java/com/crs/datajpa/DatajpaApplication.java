@@ -10,4 +10,5 @@ public class DatajpaApplication {
 		SpringApplication.run(DatajpaApplication.class, args);
 	}
 
+
 }

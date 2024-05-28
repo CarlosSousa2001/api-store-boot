@@ -1,20 +1,23 @@
 package com.crs.datajpa.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.Objects;
 
 @Entity
 public class OrderItem {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private OrderItemPK id;
 
-    @JsonIgnore
+    @MapsId("orderPK") // o jpa agora vai inserir automaticamente o id pra mim
     @ManyToOne
+    @JoinColumn(name = "ORDER_PK")
     private Order order;
 
+    @MapsId("productPK")
     @ManyToOne
+    @JoinColumn(name = "PRODUCT_PK")
     private Product product;
 
     private String size;
@@ -23,9 +26,11 @@ public class OrderItem {
 
     private Integer price;
 
+
     public OrderItem(){}
 
-    public OrderItem(Long id, Order order, Product product, String size, int quantity, Integer price) {
+
+    public OrderItem(OrderItemPK id, Order order, Product product, String size, int quantity, Integer price) {
         this.id = id;
         this.order = order;
         this.product = product;
@@ -34,11 +39,11 @@ public class OrderItem {
         this.price = price;
     }
 
-    public Long getId() {
+    public OrderItemPK getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(OrderItemPK id) {
         this.id = id;
     }
 

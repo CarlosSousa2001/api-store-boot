@@ -30,13 +30,23 @@ public class OrderService {
         Customer user = userService.getById(addOrder.getUserId());
         Cart cart = cartService.findCart(addOrder.getUserId());
 
+        Order createdOrder = new Order();
+        createdOrder.setUser(user);
+        // Salva a ordem no banco de dados para obter o ID
+        Order savedOrder = orderRepository.save(createdOrder);
+
         List<OrderItem> orderItems = new ArrayList<>();
 
         for (CartItem item: cart.getCartItems()){
             OrderItem orderItem = new OrderItem();
 
+            OrderItemPK orderItemPK = new OrderItemPK();
+
+            orderItemPK.setProductPK(item.getProduct().getId());
+            orderItemPK.setOrderPK(savedOrder.getId());
+
+            orderItem.setId(orderItemPK);  // Define a chave composta no OrderItem
             orderItem.setPrice(item.getPrice());
-            orderItem.setProduct(item.getProduct());
             orderItem.setQuantity(item.getQuantity());
             orderItem.setSize(item.getSize());
 
@@ -45,19 +55,9 @@ public class OrderService {
             orderItems.add(createdOrderItem);
         }
 
-        Order createdOrder = new Order();
 
-        createdOrder.setUser(user);
-        createdOrder.setOrderItems(orderItems);
-
-        Order savedOrder = orderRepository.save(createdOrder);
-
-        // eu fiz o relacionamento da lista de Orderitems com o order, agora eu preciso dizer para cada ordemitem que order ele pentence, assim como fiz no for acima
-
-        for(OrderItem item: orderItems){
-            item.setOrder(savedOrder);
-            orderItemRepository.save(item);
-        }
+        savedOrder.setOrderItems(orderItems);
+        orderRepository.save(savedOrder);
 
        return savedOrder;
 
