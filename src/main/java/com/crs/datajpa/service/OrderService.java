@@ -6,6 +6,7 @@ import com.crs.datajpa.repository.OrderRepository;
 import com.crs.datajpa.request.AddOrderRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class OrderService {
     @Autowired
     private CartService cartService;
 
+    @Transactional
     public Order createOrder(AddOrderRequest addOrder){
 
         Customer user = userService.getById(addOrder.getUserId());
@@ -38,17 +40,19 @@ public class OrderService {
         List<OrderItem> orderItems = new ArrayList<>();
 
         for (CartItem item: cart.getCartItems()){
+
+            OrderItemPK orderItemPK = new OrderItemPK(savedOrder.getId(), item.getProduct().getId());
+
             OrderItem orderItem = new OrderItem();
 
-            OrderItemPK orderItemPK = new OrderItemPK();
+            orderItem.setId(orderItemPK);
+            orderItem.setOrder(savedOrder);
+            orderItem.setProduct(item.getProduct());
 
-            orderItemPK.setProductPK(item.getProduct().getId());
-            orderItemPK.setOrderPK(savedOrder.getId());
-
-            orderItem.setId(orderItemPK);  // Define a chave composta no OrderItem
             orderItem.setPrice(item.getPrice());
             orderItem.setQuantity(item.getQuantity());
             orderItem.setSize(item.getSize());
+
 
             OrderItem createdOrderItem = orderItemRepository.save(orderItem);
 

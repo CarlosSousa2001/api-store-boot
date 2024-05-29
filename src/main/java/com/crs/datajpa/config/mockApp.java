@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-
 public class mockApp implements ApplicationRunner {
 
 
@@ -27,6 +26,7 @@ public class mockApp implements ApplicationRunner {
 
     private CartRepository cartRepository;
 
+    private CartItemRepository cartItemRepository;
 
     private ProductRepository productRepository;
 
@@ -40,11 +40,12 @@ public class mockApp implements ApplicationRunner {
 
     private InvoiceRepository invoiceRepository;
 
-    mockApp(CategoryRepository categoryRepository, UserRepository userRepository, AddressRepository addressRepository, CartRepository cartRepository, ProductRepository productRepository, OrderRepository orderRepository, OrderItemRepository orderItemRepository, PaymenteRepository paymenteRepository, InvoiceRepository invoiceRepository) {
+    mockApp(CategoryRepository categoryRepository, UserRepository userRepository, AddressRepository addressRepository, CartRepository cartRepository, CartItemRepository cartItemRepository, ProductRepository productRepository, OrderRepository orderRepository, OrderItemRepository orderItemRepository, PaymenteRepository paymenteRepository, InvoiceRepository invoiceRepository) {
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
         this.addressRepository = addressRepository;
         this.cartRepository = cartRepository;
+        this.cartItemRepository = cartItemRepository;
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
@@ -74,31 +75,63 @@ public class mockApp implements ApplicationRunner {
 
         productRepository.save(product);
 
+        //
+
+        Cart cart = new Cart();
+
+        cart.setUserCart(customer);
+        customer.setCart(cart);
+        cartRepository.save(cart);
+
+        CartItem cartItem = new CartItem();
+
+        cartItem.setCart(cart);
+        cartItem.setProduct(product);
+        cartItem.setQuantity(2);
+
+        CartItem createdCartItem = cartItemRepository.save(cartItem);
+
+        cart.getCartItems().add(createdCartItem);
+
+        cartRepository.save(cart);
+
         // criar odemitem -ordem
-
-        List<OrderItem> orderItems = new ArrayList<>();
-
-        OrderItem orderItem1 = new OrderItem();
-        orderItem1.setSize("M");
-        orderItem1.setQuantity(2);
-        orderItem1.setPrice(450);
-
-        OrderItem createdOrderItem = orderItemRepository.save(orderItem1);
-
-        orderItems.add(createdOrderItem);
-
-        // order
 
         Order order = new Order();
         order.setId(1L);
         order.setUser(customer);
-        order.setOrderItems(orderItems);
         Order savedOrder = orderRepository.save(order);
 
-//        OrderItemPK orderItemPK = new OrderItemPK();
-//
-//        orderItemPK.setProduct(product);
-//        orderItemPK.setOrder(order);
+
+
+        List<OrderItem> orderItems = new ArrayList<>();
+
+        for(CartItem item: cart.getCartItems()){
+
+            OrderItemPK orderItemPK = new OrderItemPK(order.getId(), item.getProduct().getId());
+
+            OrderItem orderItem1 = new OrderItem();
+
+            orderItem1.setId(orderItemPK);
+            orderItem1.setProduct(product);
+            orderItem1.setOrder(savedOrder);
+
+            orderItem1.setSize("M");
+            orderItem1.setQuantity(2);
+            orderItem1.setPrice(450);
+
+
+            OrderItem createdOrderItem = orderItemRepository.save(orderItem1);
+
+            orderItems.add(createdOrderItem);
+
+        }
+
+        // order
+
+        order.setOrderItems(orderItems);
+
+        orderRepository.save(order);
 //
 //        for (OrderItem item : orderItems) {
 //            item.setId(orderItemPK);
@@ -135,8 +168,6 @@ public class mockApp implements ApplicationRunner {
 
         invoiceRepository.save(invoice1);
 
-
-
-
+        
     }
 }

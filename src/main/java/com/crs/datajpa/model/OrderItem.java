@@ -1,5 +1,6 @@
 package com.crs.datajpa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -10,14 +11,15 @@ public class OrderItem {
     @EmbeddedId
     private OrderItemPK id;
 
-    @MapsId("orderPK") // o jpa agora vai inserir automaticamente o id pra mim
+    @MapsId("orderId") // o jpa agora vai inserir automaticamente o id pra mim
     @ManyToOne
-    @JoinColumn(name = "ORDER_PK")
+    @JoinColumn(name = "ORDER_ID", nullable = false)
+    @JsonIgnore
     private Order order;
 
-    @MapsId("productPK")
+    @MapsId("productId")
     @ManyToOne
-    @JoinColumn(name = "PRODUCT_PK")
+    @JoinColumn(name = "PRODUCT_ID",  nullable = false)
     private Product product;
 
     private String size;
@@ -28,7 +30,6 @@ public class OrderItem {
 
 
     public OrderItem(){}
-
 
     public OrderItem(OrderItemPK id, Order order, Product product, String size, int quantity, Integer price) {
         this.id = id;
