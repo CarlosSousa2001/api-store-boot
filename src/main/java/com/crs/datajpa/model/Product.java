@@ -1,5 +1,6 @@
 package com.crs.datajpa.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -29,12 +30,20 @@ public class Product {
     @Column(name = "update_at", insertable = false) // não posso adicionar ou modificiar
     private LocalDateTime updateAt;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @ManyToMany
     @JoinTable(name = "product_category",
         joinColumns = @JoinColumn(name = "product_id"),
         inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private List<Category> categories;
+
+    @ElementCollection
+    @CollectionTable(name = "product_tag",
+        joinColumns = @JoinColumn(name = "product_id")
+    )
+    @Column(name = "tag")
+    private List<String> tags;
 
 
 

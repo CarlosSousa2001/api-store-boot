@@ -13,7 +13,9 @@ public class Invoice { // nota fiscal
     private Long id;
     @OneToOne(mappedBy = "invoice", optional = false)
     private Order order;
-    private String text;
+
+    @Lob // para "arquivos" grandes
+    private byte[] text;
 
     private Date dateOfIssue; // data emissão
 
@@ -21,13 +23,12 @@ public class Invoice { // nota fiscal
     public Invoice() {
     }
 
-    public Invoice(Long id, Order order, String text, Date dateOfIssue) {
+    public Invoice(Long id, Order order, byte[] text, Date dateOfIssue) {
         this.id = id;
         this.order = order;
         this.text = text;
         this.dateOfIssue = dateOfIssue;
     }
-
 
     public Long getId() {
         return id;
@@ -41,16 +42,16 @@ public class Invoice { // nota fiscal
         return order;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public String getText() {
+    public byte[] getText() {
         return text;
     }
 
-    public void setText(String text) {
+    public void setText(byte[] text) {
         this.text = text;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public Date getDateOfIssue() {

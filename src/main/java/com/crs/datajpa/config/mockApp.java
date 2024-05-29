@@ -8,12 +8,14 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+@Component
 public class mockApp implements ApplicationRunner {
 
 
@@ -163,11 +165,19 @@ public class mockApp implements ApplicationRunner {
         Invoice invoice1 = new Invoice();
 
         invoice1.setOrder(order);
-        invoice1.setText("HTML OU XML DA NOTA");
+        invoice1.setText(carregarNotaFiscal());
         invoice1.setDateOfIssue(new Date());
 
         invoiceRepository.save(invoice1);
 
-        
+
+    }
+
+    private static byte[] carregarNotaFiscal(){
+        try{
+            return mockApp.class.getResourceAsStream("/nota-fiscal.xml").readAllBytes();
+        } catch (Exception e) {
+            throw  new RuntimeException(e);
+        }
     }
 }
