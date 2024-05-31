@@ -7,8 +7,7 @@ import org.hibernate.annotations.TimeZoneColumn;
 import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "produto",
@@ -48,10 +47,10 @@ public class Product {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @ManyToMany
     @JoinTable(name = "product_category",
-        joinColumns = @JoinColumn(name = "product_id"),
-        inverseJoinColumns = @JoinColumn(name = "category_id")
+        joinColumns = @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "fk_product_category_product")),
+        inverseJoinColumns = @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "fk_inverse_product_category_product"))
     )
-    private List<Category> categories;
+    private Set<Category> categories = new HashSet<>();
 
     @ElementCollection
     @CollectionTable(name = "product_tag",
@@ -59,18 +58,19 @@ public class Product {
     )
     @Column(name = "tag")
     @Size(max = 75)
-    private List<String> tags;
+    private List<String> tags = new ArrayList<>();
 
 
 
     public Product(){}
 
-    public Product(Long id, String title, String description, int price, String cod, LocalDateTime createdAt, LocalDateTime updateAt, List<Category> categories, List<String> tags) {
+    public Product(Long id, String title, String description, int price, String cod, String photoUrl, LocalDateTime createdAt, LocalDateTime updateAt, Set<Category> categories, List<String> tags) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.price = price;
         this.cod = cod;
+        this.photoUrl = photoUrl;
         this.createdAt = createdAt;
         this.updateAt = updateAt;
         this.categories = categories;
@@ -117,6 +117,14 @@ public class Product {
         this.cod = cod;
     }
 
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -133,11 +141,11 @@ public class Product {
         return updateAt;
     }
 
-    public List<Category> getCategories() {
+    public Set<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
 

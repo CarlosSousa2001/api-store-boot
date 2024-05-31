@@ -1,6 +1,8 @@
 package com.crs.datajpa.controller;
 
 import com.crs.datajpa.model.Product;
+import com.crs.datajpa.model.dto.ProductDTO;
+import com.crs.datajpa.model.dto.ProductResponseDTO;
 import com.crs.datajpa.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,8 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product productRequest) {
-        var productRes = productService.createProduct(productRequest);
+    public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody ProductDTO productDTO) {
+        var productRes = productService.createProduct(productDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(productRes);
     }
 

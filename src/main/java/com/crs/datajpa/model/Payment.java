@@ -9,7 +9,8 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne()
+    @OneToOne
+    @JoinColumn(name = "order_id", foreignKey = @ForeignKey(name = "fk_payment_order"))
     private Order order;
 
     @Enumerated(EnumType.STRING)

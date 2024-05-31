@@ -27,6 +27,7 @@ public class Order {
     private Payment payment;
 
     @OneToOne
+    @JoinColumn(name = "invoice_id", foreignKey = @ForeignKey(name = "fk_order_invoice"))
     private Invoice invoice; // nota fiscal
 
     public Order(){}
