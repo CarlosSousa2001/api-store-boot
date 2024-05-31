@@ -21,7 +21,7 @@ public class OrderService {
     private OrderItemRepository orderItemRepository;
 
     @Autowired
-    private UserService userService;
+    private CustomerService customerService;
 
     @Autowired
     private CartService cartService;
@@ -29,7 +29,7 @@ public class OrderService {
     @Transactional
     public Order createOrder(AddOrderRequest addOrder){
 
-        Customer user = userService.getById(addOrder.getUserId());
+        Customer user = customerService.getById(addOrder.getUserId());
         Cart cart = cartService.findCart(addOrder.getUserId());
 
         Order createdOrder = new Order();

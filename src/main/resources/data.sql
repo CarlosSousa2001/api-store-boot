@@ -7,7 +7,7 @@ VALUES ('PENDING'), ('PROCESSING'), ('COMPLETED'), ('FAILED'), ('CANCELLED'), ('
 INSERT INTO product (title, description, price, created_at)
 VALUES ('Titulo do Produto', 'Descrição do Produto', 100, '2024-05-29T00:00:00');
 
-INSERT INTO users (username, email, password, role)
+INSERT INTO customer (username, email, password, role)
 VALUES ('mockuser', 'mockuser@example.com', 'mockpassword', 'ROLE_CLIENTE');
 
 

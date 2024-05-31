@@ -19,7 +19,7 @@ public class CartService {
     @Autowired
     private CartRepository cartRepository;
     @Autowired
-    private UserService userService;
+    private CustomerService customerService;
     @Autowired
     private ProductService productService;
 
@@ -45,7 +45,7 @@ public class CartService {
 
     public String addItemToCart(AddItemRequest addItem)  {
 
-        Customer user = userService.getById(addItem.getUserID());
+        Customer user = customerService.getById(addItem.getUserID());
 
         Optional<Cart> cartOptional = cartRepository.findByUserId(addItem.getUserID());
 

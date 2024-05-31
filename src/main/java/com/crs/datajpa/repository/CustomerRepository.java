@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<Customer,Long> {
+public interface CustomerRepository extends JpaRepository<Customer,Long> {
     Optional<Customer> findByUsername(String username);
 
     @Query("SELECT u.role from Customer u WHERE u.username LIKE :username")
