@@ -2,27 +2,42 @@ package com.crs.datajpa.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.TimeZoneColumn;
+import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "produto",
+    uniqueConstraints = {@UniqueConstraint(name = "unq_cod", columnNames = {"cod"})}
+)
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title")
+    @Column(name = "title" , nullable = false)
+    @Size(min = 2, max = 100)
     private String title;
 
-    @Column(name = "description")
+    @Column(name = "description" )
+    @Size(max = 275)
     private String description;
 
-    @Column(name = "price")
+    @Column(name = "price", precision = 10, scale = 2) // value decimal(19,2)
     private int price;
 
+    @Column(nullable = false, length = 50)
+    private String cod;
+
+    @URL
+    @Column(name = "photo_url")
+    @Size(max = 225)
+    private String photoUrl;
 
     @Column(name = "created_at", updatable = false) // não posso atualizar
     private LocalDateTime createdAt;
@@ -43,20 +58,23 @@ public class Product {
         joinColumns = @JoinColumn(name = "product_id")
     )
     @Column(name = "tag")
+    @Size(max = 75)
     private List<String> tags;
 
 
 
     public Product(){}
 
-    public Product(Long id, String title, String description, int price, LocalDateTime createdAt, LocalDateTime updateAt, List<Category> categories) {
+    public Product(Long id, String title, String description, int price, String cod, LocalDateTime createdAt, LocalDateTime updateAt, List<Category> categories, List<String> tags) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.price = price;
+        this.cod = cod;
         this.createdAt = createdAt;
         this.updateAt = updateAt;
         this.categories = categories;
+        this.tags = tags;
     }
 
     public Long getId() {
@@ -91,14 +109,26 @@ public class Product {
         this.price = price;
     }
 
+    public String getCod() {
+        return cod;
+    }
+
+    public void setCod(String cod) {
+        this.cod = cod;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updateAt = LocalDateTime.now();
     }
-
+    @PreUpdate
+    protected void onUpdate() {
+        updateAt = LocalDateTime.now();
+    }
     public LocalDateTime getUpdateAt() {
         return updateAt;
     }
@@ -109,6 +139,14 @@ public class Product {
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 
     @Override

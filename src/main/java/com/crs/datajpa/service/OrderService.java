@@ -33,7 +33,7 @@ public class OrderService {
         Cart cart = cartService.findCart(addOrder.getUserId());
 
         Order createdOrder = new Order();
-        createdOrder.setUser(user);
+        createdOrder.setCustomer(user);
         // Salva a ordem no banco de dados para obter o ID
         Order savedOrder = orderRepository.save(createdOrder);
 

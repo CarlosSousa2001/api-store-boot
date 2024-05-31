@@ -15,7 +15,10 @@ public class Order {
     private Long id;
 
     @ManyToOne
-    private Customer user;
+    @JoinColumn(name = "customer_id", nullable = false,
+            foreignKey = @ForeignKey(name = "fk_order_customer")
+    )
+    private Customer customer;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
@@ -28,9 +31,9 @@ public class Order {
 
     public Order(){}
 
-    public Order(Long id, Customer user, List<OrderItem> orderItems, Payment payment, Invoice invoice) {
+    public Order(Long id, Customer customer, List<OrderItem> orderItems, Payment payment, Invoice invoice) {
         this.id = id;
-        this.user = user;
+        this.customer = customer;
         this.orderItems = orderItems;
         this.payment = payment;
         this.invoice = invoice;
@@ -44,12 +47,12 @@ public class Order {
         this.id = id;
     }
 
-    public Customer getUser() {
-        return user;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setUser(Customer user) {
-        this.user = user;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public List<OrderItem> getOrderItems() {

@@ -13,19 +13,19 @@ public class OrderItem {
 
     @MapsId("orderId") // o jpa agora vai inserir automaticamente o id pra mim
     @ManyToOne
-    @JoinColumn(name = "ORDER_ID", nullable = false)
+    @JoinColumn(name = "ORDER_ID", nullable = false, foreignKey = @ForeignKey(name = "fk_order_item_order"))
     @JsonIgnore
     private Order order;
 
     @MapsId("productId")
     @ManyToOne
-    @JoinColumn(name = "PRODUCT_ID",  nullable = false)
+    @JoinColumn(name = "PRODUCT_ID",  nullable = false, foreignKey = @ForeignKey(name = "fk_order_item_product"))
     private Product product;
 
     private String size;
 
     private int quantity;
-
+    @Column(name = "price", precision = 10, scale = 2) // value decimal(19,2)
     private Integer price;
 
 

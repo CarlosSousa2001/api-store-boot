@@ -68,7 +68,6 @@ public class mockApp implements ApplicationRunner {
 
         product.setTitle("RTX 3050 TI");
         product.setDescription("Uma placa de vídeo");
-        product.setCreatedAt(LocalDateTime.now());
         product.setPrice(250);
 
         productRepository.save(product);
@@ -97,7 +96,7 @@ public class mockApp implements ApplicationRunner {
 
         Order order = new Order();
         order.setId(1L);
-        order.setUser(customer);
+        order.setCustomer(customer);
         Order savedOrder = orderRepository.save(order);
 
 
