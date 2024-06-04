@@ -33,7 +33,7 @@ public class CustomerService {
         Optional<Customer> userOptional = customerRepository.findById(id);
 
         if(userOptional.isEmpty()) {
-            throw new EntityNotFoundException(String.format("Usuário id=%s não encontrado", id));
+            throw new EntityNotFoundException();
         }
 
         return userOptional.get();

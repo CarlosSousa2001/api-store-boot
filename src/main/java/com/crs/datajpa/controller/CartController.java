@@ -1,6 +1,5 @@
 package com.crs.datajpa.controller;
 
-import com.crs.datajpa.Response.ApiResponse;
 import com.crs.datajpa.model.Cart;
 import com.crs.datajpa.request.AddItemRequest;
 import com.crs.datajpa.service.CartService;
@@ -23,11 +22,9 @@ public class CartController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> addItemToCart(@RequestBody AddItemRequest addReq){
-        var res = cartService.addItemToCart(addReq);
+    public ResponseEntity<Cart> addItemToCart(@RequestBody AddItemRequest addReq){
+        var cart = cartService.addItemToCart(addReq);
 
-        ApiResponse apiResponse = new ApiResponse(res, true);
-
-        return ResponseEntity.ok().body(apiResponse);
+        return ResponseEntity.ok().body(cart);
     }
 }

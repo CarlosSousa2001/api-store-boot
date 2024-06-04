@@ -38,24 +38,22 @@ public class ProductService {
 
         for(Long item: categoryIds){
             Category categoryExist = categoryRepository.findById(item).orElseThrow(
-                    () -> new EntityNotFoundException("Categoria não encontrada")
+                    () -> new EntityNotFoundException()
             );
             categoryList.add(categoryExist);
         }
 
+
         Product createProduct = new Product();
-        createProduct.setTitle(productDTO.title());
-        createProduct.setDescription(productDTO.description());
-        createProduct.setPrice(productDTO.price());
-        createProduct.setCod(productDTO.cod());
-        createProduct.setPhotoUrl(productDTO.photoUrl());
+
+        BeanUtils.copyProperties(productDTO, createProduct, "categoryIds");
+
         createProduct.getCategories().addAll(categoryList);
-        createProduct.setTags(productDTO.tags());
 
         var savedProduct = productRepository.save(createProduct);
 
         List<CategoryDTO> categoryDTOs = categoryList.stream()
-                .map(category -> new CategoryDTO(category.getId(), category.getNameCategory())) // Supondo que o CategoryDTO tenha um construtor que aceite ID e nome
+                .map(category -> new CategoryDTO(category.getId(), category.getNameCategory()))
                 .collect(Collectors.toList());
 
 
@@ -72,12 +70,8 @@ public class ProductService {
     }
 
     public Product getById(Long id) {
-        Optional<Product> productOptional = productRepository.findById(id);
-
-        if(productOptional.isEmpty()){
-            throw new EntityNotFoundException(String.format("Produto id=%s não encontrado", id));
-        };
-
-        return productOptional.get();
+       return productRepository.findById(id).orElseThrow(
+               () -> new EntityNotFoundException()
+       );
     }
 }

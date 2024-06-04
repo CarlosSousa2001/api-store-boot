@@ -26,7 +26,7 @@ public class Customer {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
 
-    @OneToOne(mappedBy = "userCart", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     @JsonIgnore
     private Cart cart;
 

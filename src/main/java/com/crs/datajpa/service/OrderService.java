@@ -1,6 +1,9 @@
 package com.crs.datajpa.service;
 
+import com.crs.datajpa.exceptions.EntityNotFoundException;
 import com.crs.datajpa.model.*;
+import com.crs.datajpa.repository.CartRepository;
+import com.crs.datajpa.repository.CustomerRepository;
 import com.crs.datajpa.repository.OrderItemRepository;
 import com.crs.datajpa.repository.OrderRepository;
 import com.crs.datajpa.request.AddOrderRequest;
@@ -10,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -24,13 +28,34 @@ public class OrderService {
     private CustomerService customerService;
 
     @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
     private CartService cartService;
+
+    @Autowired
+    private CartRepository cartRepository;
+
 
     @Transactional
     public Order createOrder(AddOrderRequest addOrder){
 
-        Customer user = customerService.getById(addOrder.getUserId());
-        Cart cart = cartService.findCart(addOrder.getUserId());
+        Customer user = getCustomer(addOrder.getUserId());
+
+        if(user == null) throw new EntityNotFoundException();
+
+        Cart cart = getCart(addOrder.getCartId());
+
+        if(cart == null) throw new EntityNotFoundException();
+
+        // Se o usuário existir e o carrinho não tiver um usuário associado, associar o usuário ao carrinho
+        if (cart.getCustomer() == null) {
+            cart.setCustomer(user);
+            cartRepository.save(cart); // Atualiza o carrinho com o usuário associado
+        }
+        
+        // preciso verificar se caso o cart ja tenha um usuario associado é o mesmo id do usuario que eu mandei no json
+
 
         Order createdOrder = new Order();
         createdOrder.setCustomer(user);
@@ -65,6 +90,14 @@ public class OrderService {
 
        return savedOrder;
 
+    }
+
+    private Customer getCustomer(Long id){
+        return customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
+
+    private Cart getCart(Long id){
+        return cartRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
 }

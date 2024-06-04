@@ -34,7 +34,7 @@ public class CategoryService {
         Optional<Category> categoryOptional = categoryRepository.findById(id);
 
         if(categoryOptional.isEmpty()){
-            throw new EntityNotFoundException("categoria não encontrada");
+            throw new EntityNotFoundException();
         }
         return new CategoryDTO(categoryOptional.get().getId(), categoryOptional.get().getNameCategory());
     }
@@ -56,7 +56,7 @@ public class CategoryService {
     public CategoryDTO updateCategoryService(Long id, CategoryDTO categoryDTO){
 
         Category categoryOptional = categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada"));
+                .orElseThrow(() -> new EntityNotFoundException());
 
         categoryOptional.setNameCategory(categoryDTO.nameCategory());
 

@@ -76,7 +76,7 @@ public class mockApp implements ApplicationRunner {
 
         Cart cart = new Cart();
 
-        cart.setUserCart(customer);
+        cart.setCustomer(customer);
         customer.setCart(cart);
         cartRepository.save(cart);
 

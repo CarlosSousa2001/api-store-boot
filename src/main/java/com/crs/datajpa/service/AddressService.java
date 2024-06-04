@@ -43,7 +43,7 @@ public class AddressService {
     @Transactional(readOnly = true)
     public AddressDTO getAddressByIdService(Long id){
         Address address = addressRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Endereço não encontrado")
+                () -> new EntityNotFoundException()
         );
 
         return new AddressDTO(
@@ -85,7 +85,7 @@ public class AddressService {
 
     public AddressDTO updateAddressService(Long id, AddressDTO addressDTO){
         Address addressOptional = addressRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Endereço não encontrado")
+                () -> new EntityNotFoundException()
         );
 
         BeanUtils.copyProperties(addressDTO, addressOptional, "user", "id");

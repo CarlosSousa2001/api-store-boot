@@ -27,38 +27,34 @@ public class CartService {
     private CartItemService cartItemService;
 
     public Cart findCart(Long id){
-        Optional<Cart> cartOptional = cartRepository.findByUserId(id);
+        return cartRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException()
+        );
 
-        if (cartOptional.isPresent()) {
-            Cart cart = cartOptional.get();
-            Customer user = cart.getUserCart();
-
-            if (user == null) {
-                throw new IllegalStateException("Carrinho encontrado, mas não há usuário associado.");
-            }
-
-            return cart;
-        } else {
-            throw new EntityNotFoundException("Produto não encontrado");
-        }
     }
 
-    public String addItemToCart(AddItemRequest addItem)  {
+    public Cart addItemToCart(AddItemRequest addItem)  {
 
-        Customer user = customerService.getById(addItem.getUserID());
+        // eu posso adicionar itens ao carrinho mesmo sem usuairo logado, assim como a amazon
 
-        Optional<Cart> cartOptional = cartRepository.findByUserId(addItem.getUserID());
+//        Customer user = customerService.getById(addItem.getUserID());
+//
+//        Optional<Cart> cartOptional = cartRepository.findByUserId(addItem.getUserID());
+//
+//        Cart cart;
+//
+//        if (cartOptional.isEmpty()) {
+//            cart = new Cart();
+//            cart.setUserCart(user);
+//            user.setCart(cart);
+//            cartRepository.save(cart);
+//        } else {
+//            cart = cartOptional.get();
+//        }
 
-        Cart cart;
+        Cart cart = new Cart();
 
-        if (cartOptional.isEmpty()) {
-            cart = new Cart();
-            cart.setUserCart(user);
-            user.setCart(cart);
-            cartRepository.save(cart);
-        } else {
-            cart = cartOptional.get();
-        }
+        cartRepository.save(cart);
 
         Product product = productService.getById(addItem.getProductId());
 
@@ -75,6 +71,6 @@ public class CartService {
 
         cartRepository.save(cart);
 
-        return "item adicionado com sucesso";
+        return cart;
     }
 }
