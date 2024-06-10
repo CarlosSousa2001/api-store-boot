@@ -66,13 +66,11 @@ public class OrderService {
 
         for (CartItem item: cart.getCartItems()){
 
-            OrderItemPK orderItemPK = new OrderItemPK(savedOrder.getId(), item.getProduct().getId());
 
             OrderItem orderItem = new OrderItem();
-
-            orderItem.setId(orderItemPK);
             orderItem.setOrder(savedOrder);
             orderItem.setProduct(item.getProduct());
+//          orderItem.setOrder(savedOrder); o jpa vai persistir para mim a ordem devido o uso do cascade.all
 
             orderItem.setPrice(item.getPrice());
             orderItem.setQuantity(item.getQuantity());

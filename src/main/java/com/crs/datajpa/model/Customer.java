@@ -30,6 +30,9 @@ public class Customer {
     @JsonIgnore
     private Cart cart;
 
+    @OneToMany(mappedBy = "customer")
+    private List<Order> orders = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -102,5 +105,9 @@ public class Customer {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

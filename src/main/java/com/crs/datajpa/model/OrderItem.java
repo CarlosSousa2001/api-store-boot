@@ -9,21 +9,8 @@ import java.util.Objects;
 public class OrderItem {
 
     @EmbeddedId
-    private OrderItemPK id;
-
-    @MapsId("orderId") // o jpa agora vai inserir automaticamente o id pra mim
-    @ManyToOne
-    @JoinColumn(name = "ORDER_ID", nullable = false, foreignKey = @ForeignKey(name = "fk_order_item_order"))
-    @JsonIgnore
-    private Order order;
-
-    @MapsId("productId")
-    @ManyToOne
-    @JoinColumn(name = "PRODUCT_ID",  nullable = false, foreignKey = @ForeignKey(name = "fk_order_item_product"))
-    private Product product;
-
+    private OrderItemPK id = new OrderItemPK();
     private String size;
-
     private int quantity;
     @Column(name = "price", precision = 10, scale = 2) // value decimal(19,2)
     private Integer price;
@@ -31,37 +18,28 @@ public class OrderItem {
 
     public OrderItem(){}
 
-    public OrderItem(OrderItemPK id, Order order, Product product, String size, int quantity, Integer price) {
-        this.id = id;
-        this.order = order;
-        this.product = product;
+    public OrderItem(Order order, Product product, String size, int quantity, Integer price) {
+        id.setOrder(order);
+        id.setProduct(product);
         this.size = size;
         this.quantity = quantity;
         this.price = price;
     }
 
-    public OrderItemPK getId() {
-        return id;
+    public Order getOrder(){
+        return id.getOrder();
     }
 
-    public void setId(OrderItemPK id) {
-        this.id = id;
+    public void setOrder(Order order){
+        id.setOrder(order);
     }
 
-    public Order getOrder() {
-        return order;
+    public Product getProduct(){
+        return id.getProduct();
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProduct(Product product){
+        id.setProduct(product);
     }
 
     public String getSize() {
@@ -86,5 +64,18 @@ public class OrderItem {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderItem orderItem = (OrderItem) o;
+        return Objects.equals(id, orderItem.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

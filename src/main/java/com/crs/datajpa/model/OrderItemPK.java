@@ -1,6 +1,5 @@
 package com.crs.datajpa.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -10,34 +9,31 @@ import java.util.Objects;
 
 @Embeddable
 public class OrderItemPK implements Serializable {
-    @Column(name = "ORDER_ID")
-    private Long orderId;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 
-    @Column(name = "PRODUCT_ID")
-    private Long productId;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     public OrderItemPK() {
     }
 
-    public OrderItemPK(Long orderId, Long productId) {
-        this.orderId = orderId;
-        this.productId = productId;
+    public Order getOrder() {
+        return order;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public Product getProduct() {
+        return product;
     }
 
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     @Override
@@ -45,11 +41,11 @@ public class OrderItemPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderItemPK that = (OrderItemPK) o;
-        return Objects.equals(orderId, that.orderId) && Objects.equals(productId, that.productId);
+        return Objects.equals(order, that.order) && Objects.equals(product, that.product);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(orderId, productId);
+        return Objects.hash(order, product);
     }
 }
