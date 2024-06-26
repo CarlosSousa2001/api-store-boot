@@ -49,7 +49,7 @@ public class AuthCustomerService {
         var token =  JWT.create()
                 .withIssuer("datajpa")
                 .withExpiresAt(expiresIn)
-                .withSubject(customer.getId().toString())
+                .withSubject(customer.getEmail())
                 .withClaim("roles", Arrays.asList("CLIENT"))
                 .sign(algorithm);
 

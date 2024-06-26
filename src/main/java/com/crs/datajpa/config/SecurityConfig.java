@@ -23,7 +23,7 @@ public class SecurityConfig {
          http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/signin", "api/v1/users").permitAll().anyRequest().authenticated()
+                        .requestMatchers("/auth/signin", "api/v1/users", "/cart/**").permitAll().anyRequest().authenticated()
                 )
                  .addFilterBefore(securityFilter, BasicAuthenticationFilter.class)
          ;

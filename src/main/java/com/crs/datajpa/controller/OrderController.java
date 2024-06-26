@@ -1,7 +1,7 @@
 package com.crs.datajpa.controller;
 
 import com.crs.datajpa.model.Order;
-import com.crs.datajpa.request.AddOrderRequest;
+import com.crs.datajpa.model.dto.OrderDTO;
 import com.crs.datajpa.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,8 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody AddOrderRequest addOrderRequest){
-        var orderRes = orderService.createOrder(addOrderRequest);
+    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO){
+        var orderRes = orderService.createOrder(orderDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(orderRes);
     }
 

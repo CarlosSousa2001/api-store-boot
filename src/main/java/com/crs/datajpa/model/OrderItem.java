@@ -12,13 +12,13 @@ public class OrderItem {
     private OrderItemPK id = new OrderItemPK();
     private String size;
     private int quantity;
-    @Column(name = "price", precision = 10, scale = 2) // value decimal(19,2)
-    private Integer price;
+    @Column(name = "price") // value decimal(19,2)
+    private Double price;
 
 
     public OrderItem(){}
 
-    public OrderItem(Order order, Product product, String size, int quantity, Integer price) {
+    public OrderItem(Order order, Product product, String size, int quantity, Double price) {
         id.setOrder(order);
         id.setProduct(product);
         this.size = size;
@@ -58,11 +58,11 @@ public class OrderItem {
         this.quantity = quantity;
     }
 
-    public Integer getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

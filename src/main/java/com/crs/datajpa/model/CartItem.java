@@ -19,11 +19,11 @@ public class CartItem {
 
     private int quantity;
 
-    private Integer price;
+    private double price;
 
     public  CartItem(){}
 
-    public CartItem(Long id, Cart cart, Product product, String size, int quantity, Integer price) {
+    public CartItem(Long id, Cart cart, Product product, String size, int quantity, double price) {
         this.id = id;
         this.cart = cart;
         this.product = product;
@@ -72,11 +72,11 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    public Integer getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 }

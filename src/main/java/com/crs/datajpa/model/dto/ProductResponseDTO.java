@@ -6,7 +6,7 @@ public record ProductResponseDTO(
         Long id,
         String title,
         String description,
-        int price,
+        Double price,
         String cod,
         String photoUrl,
         List<CategoryDTO> categories,

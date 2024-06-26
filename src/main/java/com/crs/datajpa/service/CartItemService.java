@@ -16,7 +16,7 @@ public class CartItemService {
 
         cartItem.setSize("M");
         cartItem.setQuantity(1);
-        cartItem.setPrice(cartItem.getProduct().getPrice() * cartItem.getQuantity());
+        //cartItem.setPrice(cartItem.getProduct().getPrice() * cartItem.getQuantity());
 
         return cartItemRepository.save(cartItem);
     }

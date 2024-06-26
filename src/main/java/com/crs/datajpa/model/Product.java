@@ -27,8 +27,8 @@ public class Product {
     @Size(max = 275)
     private String description;
 
-    @Column(name = "price", precision = 10, scale = 2) // value decimal(19,2)
-    private int price;
+    @Column(name = "price") // value decimal(19,2)
+    private Double price;
 
     @Column(nullable = false, length = 50)
     private String cod;
@@ -64,7 +64,7 @@ public class Product {
 
     public Product(){}
 
-    public Product(Long id, String title, String description, int price, String cod, String photoUrl, LocalDateTime createdAt, LocalDateTime updateAt, Set<Category> categories, List<String> tags) {
+    public Product(Long id, String title, String description, Double price, String cod, String photoUrl, LocalDateTime createdAt, LocalDateTime updateAt, Set<Category> categories, List<String> tags) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -101,11 +101,11 @@ public class Product {
         this.description = description;
     }
 
-    public int getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

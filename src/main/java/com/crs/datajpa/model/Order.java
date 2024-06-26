@@ -2,6 +2,7 @@ package com.crs.datajpa.model;
 
 import jakarta.persistence.*;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -14,6 +15,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant moment;
+
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_order_customer")
@@ -23,7 +27,7 @@ public class Order {
     @OneToMany(mappedBy = "id.order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @OneToOne(mappedBy = "order")
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
     @OneToOne
@@ -32,8 +36,9 @@ public class Order {
 
     public Order(){}
 
-    public Order(Long id, Customer customer, List<OrderItem> orderItems, Payment payment, Invoice invoice) {
+    public Order(Long id, Instant moment, Customer customer, List<OrderItem> orderItems, Payment payment, Invoice invoice) {
         this.id = id;
+        this.moment = moment;
         this.customer = customer;
         this.orderItems = orderItems;
         this.payment = payment;
@@ -46,6 +51,14 @@ public class Order {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Instant getMoment() {
+        return moment;
+    }
+
+    public void setMoment(Instant moment) {
+        this.moment = moment;
     }
 
     public Customer getCustomer() {

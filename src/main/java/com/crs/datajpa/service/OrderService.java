@@ -2,18 +2,15 @@ package com.crs.datajpa.service;
 
 import com.crs.datajpa.exceptions.EntityNotFoundException;
 import com.crs.datajpa.model.*;
-import com.crs.datajpa.repository.CartRepository;
-import com.crs.datajpa.repository.CustomerRepository;
-import com.crs.datajpa.repository.OrderItemRepository;
-import com.crs.datajpa.repository.OrderRepository;
-import com.crs.datajpa.request.AddOrderRequest;
+import com.crs.datajpa.repository.*;
+import com.crs.datajpa.model.dto.OrderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -36,13 +33,16 @@ public class OrderService {
     @Autowired
     private CartRepository cartRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private PaymenteRepository paymenteRepository;
 
     @Transactional
-    public Order createOrder(AddOrderRequest addOrder){
+    public OrderDTO createOrder(OrderDTO addOrder){
 
-        Customer user = getCustomer(addOrder.getUserId());
-
-        if(user == null) throw new EntityNotFoundException();
+        Customer customer = customerService.authenticated();
 
         Cart cart = getCart(addOrder.getCartId());
 
@@ -50,24 +50,34 @@ public class OrderService {
 
         // Se o usuário existir e o carrinho não tiver um usuário associado, associar o usuário ao carrinho
         if (cart.getCustomer() == null) {
-            cart.setCustomer(user);
+            cart.setCustomer(customer);
             cartRepository.save(cart); // Atualiza o carrinho com o usuário associado
         }
         
         // preciso verificar se caso o cart ja tenha um usuario associado é o mesmo id do usuario que eu mandei no json
-        if(cart.getCustomer() != user) throw new EntityNotFoundException();
+        if(cart.getCustomer() != customer) throw new EntityNotFoundException();
+
 
 
         Order createdOrder = new Order();
-        createdOrder.setCustomer(user);
+        createdOrder.setMoment(Instant.now());
+        createdOrder.setCustomer(customer);
+
+        Payment payment = new Payment();
+        payment.setStatus(PaymentStatus.PROCESSING);
+
+        createdOrder.setPayment(payment);
+
         // Salva a ordem no banco de dados para obter o ID
         Order savedOrder = orderRepository.save(createdOrder);
 
-        List<OrderItem> orderItems = new ArrayList<>();
 
         for (CartItem item: cart.getCartItems()){
 
+            Product product = productRepository.getReferenceById(item.getProduct().getId());
+
             OrderItem orderItem = new OrderItem();
+
             orderItem.setOrder(savedOrder);
             orderItem.setProduct(item.getProduct());
 //          orderItem.setOrder(savedOrder); o jpa vai persistir para mim a ordem devido o uso do cascade.all
@@ -77,21 +87,18 @@ public class OrderService {
             orderItem.setSize(item.getSize());
 
 
-            OrderItem createdOrderItem = orderItemRepository.save(orderItem);
-
-            orderItems.add(createdOrderItem);
+            savedOrder.getOrderItems().add(orderItem);
         }
 
 
-        savedOrder.setOrderItems(orderItems);
         orderRepository.save(savedOrder);
 
-       return savedOrder;
 
-    }
 
-    private Customer getCustomer(Long id){
-        return customerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+        orderItemRepository.saveAll(savedOrder.getOrderItems());
+
+       return new OrderDTO(savedOrder);
+
     }
 
     private Cart getCart(Long id){
