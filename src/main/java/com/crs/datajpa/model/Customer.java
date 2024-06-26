@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "customer")
@@ -33,8 +35,11 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private List<Order> orders = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @ManyToMany
+    @JoinTable(name = "tb_user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     public Customer(){}
 
@@ -47,9 +52,6 @@ public class Customer {
         this.cart = cart;
     }
 
-    public enum Role {
-        ROLE_ADMIN, ROLE_CLIENTE
-    }
 
     public Long getId() {
         return id;
@@ -99,12 +101,8 @@ public class Customer {
         this.cart = cart;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
     public void setOrders(List<Order> orders) {

@@ -1,6 +1,6 @@
 package com.crs.datajpa.model;
 
-import com.crs.datajpa.model.dto.CustomerDTO;
+import com.crs.datajpa.model.dto.CustomerSignUpDTO;
 import com.crs.datajpa.repository.OrderRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 
@@ -96,11 +95,11 @@ public class BasicoJPQLTeste {
     public void projetarNoDto(){
         String jpqlCustomer  = "select new com.crs.datajpa.model.dto.CustomerDTO(c.id, c.username) from Customer c";
 
-        TypedQuery<CustomerDTO> typedQuery = entityManager.createQuery(jpqlCustomer, CustomerDTO.class);
+        TypedQuery<CustomerSignUpDTO> typedQuery = entityManager.createQuery(jpqlCustomer, CustomerSignUpDTO.class);
 
-        List<CustomerDTO> customerDTO = typedQuery.getResultList();
+        List<CustomerSignUpDTO> customerSignUpDTO = typedQuery.getResultList();
 
-        Assertions.assertNotNull(customerDTO);
+        Assertions.assertNotNull(customerSignUpDTO);
     }
 
 

@@ -55,6 +55,7 @@ public class OrderService {
         }
         
         // preciso verificar se caso o cart ja tenha um usuario associado é o mesmo id do usuario que eu mandei no json
+        if(cart.getCustomer() != user) throw new EntityNotFoundException();
 
 
         Order createdOrder = new Order();
@@ -65,7 +66,6 @@ public class OrderService {
         List<OrderItem> orderItems = new ArrayList<>();
 
         for (CartItem item: cart.getCartItems()){
-
 
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(savedOrder);
@@ -91,11 +91,11 @@ public class OrderService {
     }
 
     private Customer getCustomer(Long id){
-        return customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return customerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
     }
 
     private Cart getCart(Long id){
-        return cartRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return cartRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
     }
 
 }

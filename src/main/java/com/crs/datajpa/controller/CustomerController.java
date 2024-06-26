@@ -1,6 +1,7 @@
 package com.crs.datajpa.controller;
 
 import com.crs.datajpa.model.Customer;
+import com.crs.datajpa.model.dto.CustomerSignUpDTO;
 import com.crs.datajpa.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,8 +16,8 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<Customer> createUser(@RequestBody Customer userRequest) {
-        var userRes = customerService.createUser(userRequest);
+    public ResponseEntity<CustomerSignUpDTO> createUser(@RequestBody CustomerSignUpDTO userRequest) {
+        CustomerSignUpDTO userRes = customerService.createUser(userRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(userRes);
     }
 
