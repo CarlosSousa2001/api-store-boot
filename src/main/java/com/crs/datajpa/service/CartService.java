@@ -6,6 +6,7 @@ import com.crs.datajpa.model.CartItem;
 import com.crs.datajpa.model.Product;
 import com.crs.datajpa.model.Customer;
 import com.crs.datajpa.repository.CartRepository;
+import com.crs.datajpa.repository.ProductRepository;
 import com.crs.datajpa.request.AddItemRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,44 +20,35 @@ public class CartService {
     @Autowired
     private CartRepository cartRepository;
     @Autowired
-    private CustomerService customerService;
-    @Autowired
-    private ProductService productService;
+    private ProductRepository productRepository;
 
-    @Autowired
-    private CartItemService cartItemService;
-
-    public Cart findCart(Long id){
+    public Cart findCart(Long id) {
         return cartRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException()
         );
 
     }
 
-    public Cart addItemToCart(AddItemRequest addItem)  {
+    public Cart addItemToCart(AddItemRequest addItem) {
 
-        // eu posso adicionar itens ao carrinho mesmo sem usuairo logado, assim como a amazon
+        // Uso de orElseGet(Cart::new): Isso cria um novo Cart apenas se ele não existir, economizando uma verificação explícita.
+        // achei meio escondido a implementação, por isso deixei mesmo no if e else
+        // Cart cart = cartRepository.findById(addItem.getCartId())
+        //       .orElseGet(Cart::new);
 
-//        Customer user = customerService.getById(addItem.getUserID());
-//
-//        Optional<Cart> cartOptional = cartRepository.findByUserId(addItem.getUserID());
-//
-//        Cart cart;
-//
-//        if (cartOptional.isEmpty()) {
-//            cart = new Cart();
-//            cart.setUserCart(user);
-//            user.setCart(cart);
-//            cartRepository.save(cart);
-//        } else {
-//            cart = cartOptional.get();
-//        }
+        Optional<Cart> isCart = cartRepository.findById(addItem.getCartId());
 
-        Cart cart = new Cart();
+        Cart cart;
 
-        cartRepository.save(cart);
+        if (isCart.isEmpty()) {
+            cart = new Cart();
+        } else {
+            cart = isCart.get();
+        }
 
-        Product product = productService.getById(addItem.getProductId());
+        Product product = productRepository.findById(addItem.getProductId())
+                .orElseThrow(() -> new EntityNotFoundException());
+
 
         CartItem cartItem = new CartItem();
 
@@ -65,12 +57,8 @@ public class CartService {
         cartItem.setQuantity(addItem.getQuantity());
 
 
-        CartItem createdCartItem = cartItemService.createCartItem(cartItem);
+        cart.getCartItems().add(cartItem);
 
-        cart.getCartItems().add(createdCartItem);
-
-        cartRepository.save(cart);
-
-        return cart;
+        return cartRepository.save(cart);
     }
 }

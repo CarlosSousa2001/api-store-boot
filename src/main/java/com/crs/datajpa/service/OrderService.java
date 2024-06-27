@@ -46,8 +46,6 @@ public class OrderService {
 
         Cart cart = getCart(addOrder.getCartId());
 
-        if(cart == null) throw new EntityNotFoundException();
-
         // Se o usuário existir e o carrinho não tiver um usuário associado, associar o usuário ao carrinho
         if (cart.getCustomer() == null) {
             cart.setCustomer(customer);
@@ -57,19 +55,14 @@ public class OrderService {
         // preciso verificar se caso o cart ja tenha um usuario associado é o mesmo id do usuario que eu mandei no json
         if(cart.getCustomer() != customer) throw new EntityNotFoundException();
 
-
-
-        Order createdOrder = new Order();
-        createdOrder.setMoment(Instant.now());
-        createdOrder.setCustomer(customer);
+        Order order = new Order();
+        order.setMoment(Instant.now());
+        order.setCustomer(customer);
 
         Payment payment = new Payment();
         payment.setStatus(PaymentStatus.PROCESSING);
 
-        createdOrder.setPayment(payment);
-
-        // Salva a ordem no banco de dados para obter o ID
-        Order savedOrder = orderRepository.save(createdOrder);
+        order.setPayment(payment);
 
 
         for (CartItem item: cart.getCartItems()){
@@ -78,7 +71,7 @@ public class OrderService {
 
             OrderItem orderItem = new OrderItem();
 
-            orderItem.setOrder(savedOrder);
+            orderItem.setOrder(order);
             orderItem.setProduct(item.getProduct());
 //          orderItem.setOrder(savedOrder); o jpa vai persistir para mim a ordem devido o uso do cascade.all
 
@@ -87,17 +80,14 @@ public class OrderService {
             orderItem.setSize(item.getSize());
 
 
-            savedOrder.getOrderItems().add(orderItem);
+            order.getOrderItems().add(orderItem);
         }
 
 
-        orderRepository.save(savedOrder);
+        orderRepository.save(order);
+        orderItemRepository.saveAll(order.getOrderItems());
 
-
-
-        orderItemRepository.saveAll(savedOrder.getOrderItems());
-
-       return new OrderDTO(savedOrder);
+       return new OrderDTO(order);
 
     }
 

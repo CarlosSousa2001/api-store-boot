@@ -27,7 +27,7 @@ public class Product {
     @Size(max = 275)
     private String description;
 
-    @Column(name = "price") // value decimal(19,2)
+    @Column(name = "price")
     private Double price;
 
     @Column(nullable = false, length = 50)

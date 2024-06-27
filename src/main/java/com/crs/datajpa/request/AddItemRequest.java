@@ -3,19 +3,17 @@ package com.crs.datajpa.request;
 public class AddItemRequest {
 
     private Long productId;
-    private Long userId;
+    private Long cartId;
     private String size;
     private int quantity;
-    private Integer price;
 
     public AddItemRequest(){}
 
-    public AddItemRequest(Long productId, Long userId, String size, int quantity, Integer price) {
+    public AddItemRequest(Long productId, Long cartId, String size, int quantity) {
         this.productId = productId;
-        this.userId = userId;
+        this.cartId = cartId;
         this.size = size;
         this.quantity = quantity;
-        this.price = price;
     }
 
     public Long getProductId() {
@@ -26,12 +24,12 @@ public class AddItemRequest {
         this.productId = productId;
     }
 
-    public Long getUserID() {
-        return userId;
+    public Long getCartId() {
+        return cartId;
     }
 
-    public void setUserID(Long userID) {
-        this.userId = userID;
+    public void setCartId(Long cartId) {
+        this.cartId = cartId;
     }
 
     public String getSize() {
@@ -50,11 +48,4 @@ public class AddItemRequest {
         this.quantity = quantity;
     }
 
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
 }
