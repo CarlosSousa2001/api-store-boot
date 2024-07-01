@@ -55,14 +55,9 @@ public class CartService {
             cart = isCart.get();
         }
 
-        if (cart.getCustomer() == null) {
-            cart.setCustomer(customer);
-            cartRepository.save(cart);
-        }
+        verifyCustomerCart(cart, customer);
 
-        if (!cart.getCustomer().equals(customer)) throw new EntityNotFoundException();
-
-        for(CartItemDTO item : addItem.getItems() ){
+        for (CartItemDTO item : addItem.getItems()) {
 
             Product product = productRepository.getReferenceById(item.getProductId());
 
@@ -85,6 +80,13 @@ public class CartService {
     public Cart getCart(Long id, Customer customer) {
         Cart cart = cartRepository.findById(id).orElseThrow(() -> new EntityNotFoundException());
 
+        verifyCustomerCart(cart, customer);
+
+        return cart;
+    }
+
+    public void verifyCustomerCart(Cart cart, Customer customer){
+
         // Se o usuário existir e o carrinho não tiver um usuário associado, associar o usuário ao carrinho
         if (cart.getCustomer() == null) {
             cart.setCustomer(customer);
@@ -94,7 +96,5 @@ public class CartService {
         // preciso verificar se caso o cart ja tenha um usuario associado é o mesmo id do usuario que eu mandei no json
         if (!cart.getCustomer().equals(customer)) throw new EntityNotFoundException();
 
-        return cart;
     }
-
 }
