@@ -1,6 +1,8 @@
 package com.crs.datajpa.controller;
 
 import com.crs.datajpa.model.Cart;
+import com.crs.datajpa.model.dto.CartDTO;
+import com.crs.datajpa.model.dto.OrderDTO;
 import com.crs.datajpa.request.AddItemRequest;
 import com.crs.datajpa.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ public class CartController {
     }
 
     @PostMapping
-    public ResponseEntity<Cart> addItemToCart(@RequestBody AddItemRequest addReq){
+    public ResponseEntity<CartDTO> addItemToCart(@RequestBody CartDTO addReq){
         var cart = cartService.addItemToCart(addReq);
 
         return ResponseEntity.ok().body(cart);

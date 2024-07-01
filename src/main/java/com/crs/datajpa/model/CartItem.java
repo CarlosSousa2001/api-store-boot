@@ -6,54 +6,36 @@ import jakarta.persistence.*;
 @Entity
 public class CartItem {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @ManyToOne
-    @JsonIgnore
-    private Cart cart;
-    @ManyToOne
-    private Product product;
-
+    @EmbeddedId
+    private CartItemPK id = new CartItemPK();
     private String size;
-
     private int quantity;
-
-    private double price;
+    private Double price;
 
     public  CartItem(){}
 
-    public CartItem(Long id, Cart cart, Product product, String size, int quantity, double price) {
-        this.id = id;
-        this.cart = cart;
-        this.product = product;
+    public CartItem(Cart cart, Product product , String size, int quantity, Double price) {
+        id.setCart(cart);
+        id.setProduct(product);
         this.size = size;
         this.quantity = quantity;
         this.price = price;
     }
 
-    public Long getId() {
-        return id;
+    public Cart getCart(){
+        return id.getCart();
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCart(Cart cart){
+        id.setCart(cart);
     }
 
-    public Cart getCart() {
-        return cart;
+    public Product getProduct(){
+        return id.getProduct();
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProduct(Product product){
+        id.setProduct(product);
     }
 
     public String getSize() {
@@ -72,11 +54,11 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 }

@@ -2,6 +2,7 @@ package com.crs.datajpa.model;
 
 import jakarta.persistence.*;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,11 +12,13 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Instant moment;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "id.cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "cart_items")
     private Set<CartItem> cartItems = new HashSet<>();
 
@@ -25,8 +28,9 @@ public class Cart {
 
     public Cart(){}
 
-    public Cart(Long id, Customer customer, Set<CartItem> cartItems, int totalItem) {
+    public Cart(Long id, Instant moment, Customer customer, Set<CartItem> cartItems, int totalItem) {
         this.id = id;
+        this.moment = moment;
         this.customer = customer;
         this.cartItems = cartItems;
         this.totalItem = totalItem;
@@ -38,6 +42,14 @@ public class Cart {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Instant getMoment() {
+        return moment;
+    }
+
+    public void setMoment(Instant moment) {
+        this.moment = moment;
     }
 
     public Customer getCustomer() {
